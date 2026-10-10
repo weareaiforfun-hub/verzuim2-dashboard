@@ -231,6 +231,47 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 .pb tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--ad-yellow); }
 .pb-foot { padding: 0 4px 4px; }
 </style>
+<script>(()=>{const q=new URLSearchParams(location.search).get('notrack');if(q===null)return;try{q==='0'?localStorage.removeItem('umami.disabled'):localStorage.setItem('umami.disabled','1');}catch(e){}history.replaceState(null,'',location.pathname+location.hash);})();</script>
+<script defer src="https://stats.arian-shafa.xyz/script.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4" data-domains="verzuim2.dashboard.arian-shafa.xyz" data-exclude-search="true" data-performance="true"></script>
+<script>(() => {
+  const T = (n, d) => { try { window.umami && window.umami.track(n, d); } catch (e) {} };
+  const txt = el => (el && (el.getAttribute('aria-label') || el.textContent) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  const area = el => { const s = el.closest('section, .card, .panel, figure, [data-chart], [id]'); if (!s) return 'page'; const h = s.querySelector('h1,h2,h3,h4,figcaption'); return txt(h) || s.id || 'page'; };
+  const ctl = el => el.id || el.name || el.getAttribute('aria-label') || txt(el.closest('label')) || el.tagName.toLowerCase();
+
+  document.addEventListener('change', e => {
+    const el = e.target; if (!el.matches('select, input')) return;
+    const v = el.type === 'checkbox' || el.type === 'radio' ? (el.checked ? (el.value || 'on') : 'off') : el.value;
+    T('filter-change', { control: ctl(el).slice(0, 50), value: String(v).slice(0, 50) });
+  }, true);
+
+  let lastChart = 0, lastBtn = null, lastBtnT = 0;
+  document.addEventListener('click', e => {
+    const el = e.target.closest('button, a, [role=button], [role=tab]');
+    if (el) {
+      if (el === lastBtn && Date.now() - lastBtnT < 400) return; lastBtn = el; lastBtnT = Date.now();
+      if (el.tagName === 'A' && el.href && el.host !== location.host) return T('outbound-click', { label: txt(el), host: el.host });
+      return T('button-click', { label: txt(el) || ctl(el), area: area(el) });
+    }
+    const svg = e.target.closest('svg');
+    if (svg && Date.now() - lastChart > 300) { lastChart = Date.now(); T('chart-click', { chart: area(svg), mark: (e.target.getAttribute('data-key') || e.target.__data__ && (e.target.__data__.key || e.target.__data__.name || e.target.__data__.sector) || e.target.tagName).toString().slice(0, 50) }); }
+  }, true);
+
+  const marks = [25, 50, 75, 100], hit = new Set();
+  addEventListener('scroll', () => {
+    const d = document.documentElement, pct = (scrollY + innerHeight) / d.scrollHeight * 100;
+    marks.forEach(m => { if (pct >= m - 1 && !hit.has(m)) { hit.add(m); T('scroll-depth', { percent: m }); } });
+  }, { passive: true });
+
+  let active = 0, last = Date.now(), sent = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') active += Date.now() - last; else last = Date.now();
+    if (document.visibilityState === 'hidden' && !sent && active > 3000) {
+      sent = true; const s = Math.round(active / 1000);
+      T('engaged-time', { seconds: s, bucket: s < 15 ? '<15s' : s < 60 ? '15-60s' : s < 180 ? '1-3m' : s < 600 ? '3-10m' : '10m+' });
+    }
+  });
+})();</script>
 </head>
 <body>
 <div id="dash-root">
