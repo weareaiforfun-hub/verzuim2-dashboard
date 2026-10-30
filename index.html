@@ -167,6 +167,8 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 .pb-page[data-focus] .pb-row { grid-template-columns: minmax(0, 1fr); }
 .pb-page[data-focus] .pb-vis.focused .pb-chart { min-height: 460px; }
 .pb-foot { font-size: 11px; color: var(--color-fg-muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding: 0 2px; }
+.pb-foot a { color: inherit; }
+.pb-foot a:hover { color: var(--color-fg); }
 /* states */
 [data-dash-source-state=empty] { color: transparent; }
 [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
@@ -463,7 +465,7 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
       </div>
     </section>
   </main>
-  <div class="pb-foot"><span>Source: Statistics Netherlands (CBS), StatLine table 80072ned. English labels added.</span><span id="foot-sel"></span></div>
+  <div class="pb-foot"><span>Source: Statistics Netherlands (CBS), StatLine table 80072ned. English labels added.</span><span id="foot-sel"></span><a href="https://arian-shafa.xyz">A project by Arian Shafa ↗</a></div>
 </div>
 </div>
 <noscript><p style="padding:2rem">This dashboard needs JavaScript.</p></noscript>
