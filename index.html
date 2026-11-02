@@ -243,6 +243,23 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 </style>
 <script>(()=>{const q=new URLSearchParams(location.search).get('notrack');if(q===null)return;try{q==='0'?localStorage.removeItem('umami.disabled'):localStorage.setItem('umami.disabled','1');}catch(e){}history.replaceState(null,'',location.pathname+location.hash);})();</script>
 <script defer src="https://stats.arian-shafa.xyz/script.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4" data-domains="verzuim2.dashboard.arian-shafa.xyz" data-exclude-search="true" data-performance="true"></script>
+<script defer src="https://stats.arian-shafa.xyz/recorder.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4"></script>
+<script>(() => {
+  const T = (n, d) => { try { window.umami && window.umami.track(n, d); } catch (e) {} };
+  const txt = el => (el && (el.getAttribute('aria-label') || el.textContent) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  // Rage clicks (3+ on the same element within a second), copied text and front-end errors
+  let rEl = null, rT = 0, rN = 0;
+  document.addEventListener('click', e => {
+    const el = e.target.closest('button, a, [role=button], [role=tab], svg'); if (!el) return;
+    const now = Date.now(); rN = el === rEl && now - rT < 1000 ? rN + 1 : 1; rEl = el; rT = now;
+    if (rN === 3) T('rage-click', { label: txt(el) || el.tagName.toLowerCase() });
+  }, true);
+  document.addEventListener('copy', () => T('copy-text', {}));
+  let errs = 0;
+  const err = m => { if (errs++ < 5) T('js-error', { message: String(m || 'unknown').slice(0, 120) }); };
+  addEventListener('error', e => { if (e.message) err(e.message); });
+  addEventListener('unhandledrejection', e => err(e.reason && (e.reason.message || e.reason)));
+})();</script>
 <script>(() => {
   const T = (n, d) => { try { window.umami && window.umami.track(n, d); } catch (e) {} };
   const txt = el => (el && (el.getAttribute('aria-label') || el.textContent) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
