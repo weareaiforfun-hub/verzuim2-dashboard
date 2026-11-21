@@ -242,7 +242,9 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 .pb-foot { padding: 0 4px 4px; }
 </style>
 <script>(()=>{const q=new URLSearchParams(location.search).get('notrack');if(q===null)return;try{q==='0'?localStorage.removeItem('umami.disabled'):localStorage.setItem('umami.disabled','1');}catch(e){}history.replaceState(null,'',location.pathname+location.hash);})();</script>
-<script defer src="https://stats.arian-shafa.xyz/script.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4" data-domains="verzuim2.dashboard.arian-shafa.xyz" data-exclude-search="true" data-performance="true"></script>
+<!-- Of the query string only the utm_* campaign tags are sent (keepCampaignTags); anything else after the ? is dropped. -->
+<script>window.keepCampaignTags=(type,p)=>{if(!p)return p;const clean=(v,keep)=>{if(!v||!v.includes('?'))return v;const[base,query]=v.split('?');const q=new URLSearchParams(query);const k=new URLSearchParams();if(keep)q.forEach((val,n)=>{if(/^utm_(source|medium|campaign|content|term)$/.test(n))k.append(n,val);});const out=k.toString();return out?base+'?'+out:base;};try{p.url=clean(p.url,true);p.referrer=clean(p.referrer,false);}catch(e){return{...p,url:String(p.url).split('?')[0],referrer:String(p.referrer||'').split('?')[0]};}return p;};</script>
+<script defer src="https://stats.arian-shafa.xyz/script.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4" data-domains="verzuim2.dashboard.arian-shafa.xyz" data-before-send="keepCampaignTags" data-performance="true"></script>
 <script defer src="https://stats.arian-shafa.xyz/recorder.js" data-website-id="81bf5aba-2738-465a-a9b6-7703960b6fe4"></script>
 <script>(() => {
   const T = (n, d) => { try { window.umami && window.umami.track(n, d); } catch (e) {} };
